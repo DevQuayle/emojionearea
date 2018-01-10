@@ -23,7 +23,8 @@ define([
     'function/updateRecent',
     'function/getRecent',
     'function/setRecent',
-    'function/supportsLocalStorage'
+    'function/supportsLocalStorage',
+    'function/setCursorOnEnd'
     //'function/calcElapsedTime', // debug only
 ],
 function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisibleChar, trigger, attach, shortnameTo,
@@ -384,6 +385,43 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisible
             self.trigger('search.keypress');
         })
 
+
+
+        .on("@keyup", function(editor){
+
+                if(options.emojiMapping){
+                    saveSelection(editor[0]);
+
+                    var emojiMap = options.emojiMap;
+
+
+
+                    for(var key in emojiMap){
+
+                        var oldKey = key;
+                        key = key.replace(':',"\\:");
+                        key = key.replace(')',"\\)");
+                        key = key.replace('(',"\\(");
+                        key = key.replace('[',"\\[");
+                        key = key.replace('*',"\\*");
+                        key = key.replace('<',"\\&lt\\;");
+                        key = key.replace('/',"\\/");
+
+                        var rex = new RegExp(key,'s');
+
+                        if(editor.html().toString().search(key) != -1){
+
+                            pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
+
+                            editor.html(editor.html().replace(rex,''));
+                            setCursonEnd();
+                        }
+                    }
+                }
+
+
+
+            })
         .on("@!resize @keyup @emojibtn.click", calcButtonPosition)
 
         .on("@!mousedown", function(editor, event) {
@@ -623,3 +661,4 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisible
         //}, self.id === 1); // calcElapsedTime()
     };
 });
+

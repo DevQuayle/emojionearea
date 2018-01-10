@@ -4,9 +4,10 @@
  * Copyright Andrey Izman and other contributors
  * Released under the MIT license
  * Date: @DATE
+ * Update : Sławek Król <krol.slawek1@gmail>
  */
-window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
-document = window.document || {};
+// window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
+// document = window.document || {};
 
 ; ( function ( factory, global ) {
     if ( typeof require === "function" && typeof exports === "object" && typeof module === "object" ) {

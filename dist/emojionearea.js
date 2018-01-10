@@ -3,10 +3,11 @@
  * https://github.com/mervick/emojionearea
  * Copyright Andrey Izman and other contributors
  * Released under the MIT license
- * Date: 2017-12-15T15:15Z
+ * Date: 2018-01-10T12:54Z
+ * Update : Sławek Król <krol.slawek1@gmail>
  */
-window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
-document = window.document || {};
+// window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
+// document = window.document || {};
 
 ; ( function ( factory, global ) {
     if ( typeof require === "function" && typeof exports === "object" && typeof module === "object" ) {
@@ -185,6 +186,28 @@ document = window.document || {};
                 autocomplete      : "off",
                 autocorrect       : "off",
                 autocapitalize    : "off",
+            },
+             emojiMapping: true,
+            emojiMap:{
+                ':p': ':stuck_out_tongue:',
+                ':P': ':stuck_out_tongue:',
+                ':-P': ':stuck_out_tongue:',
+                ':-p': ':stuck_out_tongue:',
+                ':)': ':slightly_smiling_face:',
+                ':-)': ':slightly_smiling_face:',
+                ':]': ':slightly_smiling_face:',
+                ':-]': ':slightly_smiling_face:',
+                ':(': ':white_frowning_face:',
+                ':-(': ':white_frowning_face:',
+                ':[': ':white_frowning_face:',
+                ':-[': ':white_frowning_face:',
+                ':D': ':smile:',
+                ':-D': ':smile:',
+                ':-d': ':smile:',
+                ':d': ':smile:',
+                ':*': ':kissing_heart:',
+                '<3': ':heart:',
+                ':o': ':astonished:',
             },
             search            : true,
             placeholder       : null,
@@ -857,6 +880,19 @@ document = window.document || {};
             return false;
         }
     }
+
+   function setCursonEnd() {
+        var sel = "";
+        if (window.getSelection && (sel = window.getSelection()).modify) {
+            var selectedRange = sel.getRangeAt(0);
+
+            sel.collapseToEnd();
+            sel.modify("extend", "forward", "paragraph");
+            sel.collapseToEnd();
+
+        }
+
+    };
     function init(self, source, options) {
         //calcElapsedTime('init', function() {
         options = getOptions(options);
@@ -1211,6 +1247,43 @@ document = window.document || {};
             self.trigger('search.keypress');
         })
 
+
+
+        .on("@keyup", function(editor){
+
+                if(options.emojiMapping){
+                    saveSelection(editor[0]);
+
+                    var emojiMap = options.emojiMap;
+
+
+
+                    for(var key in emojiMap){
+
+                        var oldKey = key;
+                        key = key.replace(':',"\\:");
+                        key = key.replace(')',"\\)");
+                        key = key.replace('(',"\\(");
+                        key = key.replace('[',"\\[");
+                        key = key.replace('*',"\\*");
+                        key = key.replace('<',"\\&lt\\;");
+                        key = key.replace('/',"\\/");
+
+                        var rex = new RegExp(key,'s');
+
+                        if(editor.html().toString().search(key) != -1){
+
+                            pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
+
+                            editor.html(editor.html().replace(rex,''));
+                            setCursonEnd();
+                        }
+                    }
+                }
+
+
+
+            })
         .on("@!resize @keyup @emojibtn.click", calcButtonPosition)
 
         .on("@!mousedown", function(editor, event) {
