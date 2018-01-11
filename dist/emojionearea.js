@@ -3,7 +3,7 @@
  * https://github.com/mervick/emojionearea
  * Copyright Andrey Izman and other contributors
  * Released under the MIT license
- * Date: 2018-01-10T17:26Z
+ * Date: 2018-01-11T09:12Z
  * Update : Sławek Król <krol.slawek1@gmail>
  */
 // window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
@@ -1269,7 +1269,7 @@ function setCursonEnd(node) {
                         if(editor.html().toString().search(key) != -1){
 
                             pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
-                            editor.html(editor.html().replace(rex,''));
+                            editor.html(editor.html().replace(rex,'').replace('.png"><br>','.png">'));
                             setCursonEnd(editor[0]);
 
                         }
