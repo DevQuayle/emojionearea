@@ -413,7 +413,7 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisible
 
                             pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
 
-                            editor.html(editor.html().replace(rex,''));
+                            editor.html(editor.html().replace(rex,'').replace('.png"><br>','.png">'));
                             setCursonEnd();
                         }
                     }
