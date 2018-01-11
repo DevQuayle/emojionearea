@@ -3,7 +3,7 @@
  * https://github.com/mervick/emojionearea
  * Copyright Andrey Izman and other contributors
  * Released under the MIT license
- * Date: 2018-01-11T09:12Z
+ * Date: 2018-01-11T12:32Z
  * Update : Sławek Król <krol.slawek1@gmail>
  */
 // window = ( typeof global !== "undefined" ? global : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {} );
@@ -1246,12 +1246,13 @@ function setCursonEnd(node) {
 
 
 
-        .on("@keyup", function(editor){
+      .on("@keyup", function(editor, event){
 
                 if(options.emojiMapping){
                     saveSelection(editor[0]);
 
                     var emojiMap = options.emojiMap;
+                    var isChange = false;
 
                     for(var key in emojiMap){
 
@@ -1267,12 +1268,15 @@ function setCursonEnd(node) {
                         var rex = new RegExp(key,'g');
 
                         if(editor.html().toString().search(key) != -1){
-
                             pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
-                            editor.html(editor.html().replace(rex,'').replace('.png"><br>','.png">'));
+                            editor.html(editor.html().replace(rex,'').replace('.png"><br>','.png">').replace('<br>&nbsp;<img', "<br><img"));
                             setCursonEnd(editor[0]);
-
+                            isChange = true;
                         }
+                    }
+                    if(!isChange && event.which == 13){
+                        editor.html(editor.html().replace(rex,'').replace('.png"><br><br>','.png" style=""><br>&nbsp;'));
+                        setCursonEnd(editor[0]);
                     }
                 }
 
