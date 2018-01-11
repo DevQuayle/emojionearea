@@ -394,8 +394,6 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisible
 
                     var emojiMap = options.emojiMap;
 
-
-
                     for(var key in emojiMap){
 
                         var oldKey = key;
@@ -407,14 +405,14 @@ function($, emojione, blankImg, slice, css_class, emojioneSupportMode, invisible
                         key = key.replace('<',"\\&lt\\;");
                         key = key.replace('/',"\\/");
 
-                        var rex = new RegExp(key,'s');
+                        var rex = new RegExp(key,'g');
 
                         if(editor.html().toString().search(key) != -1){
 
                             pasteHtmlAtCaret(shortnameTo(emojiMap[oldKey], self.emojiTemplate));
-
                             editor.html(editor.html().replace(rex,'').replace('.png"><br>','.png">'));
-                            setCursonEnd();
+                            setCursonEnd(editor[0]);
+
                         }
                     }
                 }
